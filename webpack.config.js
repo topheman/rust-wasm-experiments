@@ -11,15 +11,15 @@ module.exports = {
     filename: "bundle.js"
   },
   devServer: {
-    contentBase: dist,
+    contentBase: dist
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html'
+      template: "index.html"
     }),
 
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "crate")
-    }),
+    })
   ]
 };
