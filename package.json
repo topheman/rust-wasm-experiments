@@ -1,8 +1,8 @@
 {
-  "author": "Nick Fitzgerald <nfitzgerald@mozilla.com>",
-  "name": "create-rust-webpack",
-  "version": "0.1.5",
-  "repository": "https://github.com/rustwasm/rust-webpack-template",
+  "author": "Christophe Rosset <tophe@topheman.com> (http://labs.topheman.com/)",
+  "name": "rust-wasm-experiments",
+  "version": "0.1.0",
+  "repository": "https://github.com/topheman/rust-wasm-experiments",
   "license": "Apache-2.0/MIT",
   "scripts": {
     "start": "webpack-dev-server -d",

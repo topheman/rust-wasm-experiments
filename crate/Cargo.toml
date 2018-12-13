@@ -1,11 +1,7 @@
 [package]
-authors = ["The RustWasm Developers"]
+authors = ["Christophe Rosset <tophe@topheman.com> (http://labs.topheman.com/)"]
 categories = ["wasm"]
-description = "My super awesome Rust, WebAssembly, and Webpack project!"
-license = "Apache-2.0/MIT"
-name = "rust-webpack"
-readme = "./README.md"
-repository = "https://github.com/rustwasm/rust-webpack-template"
+name = "ball-wasm"
 version = "0.1.0"
 
 [lib]
