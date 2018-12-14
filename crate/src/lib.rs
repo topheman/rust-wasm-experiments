@@ -3,6 +3,8 @@ extern crate cfg_if;
 extern crate web_sys;
 extern crate wasm_bindgen;
 
+mod ball;
+
 use wasm_bindgen::prelude::*;
 
 cfg_if! {
@@ -27,20 +29,20 @@ cfg_if! {
     }
 }
 
-// Called by our JS entry point to run the example.
-#[wasm_bindgen]
-pub fn run() -> Result<(), JsValue> {
-    set_panic_hook();
+// Called by our JS entry point to run the example. - ⚠️ DISABLED (not called anymore)
+// #[wasm_bindgen]
+// pub fn run() -> Result<(), JsValue> {
+//     set_panic_hook();
 
-    let window = web_sys::window().expect("should have a Window");
-    let document = window.document().expect("should have a Document");
+//     let window = web_sys::window().expect("should have a Window");
+//     let document = window.document().expect("should have a Document");
 
-    let p: web_sys::Node = document.create_element("p")?.into();
-    p.set_text_content(Some("Hello from Rust, WebAssembly, and Webpack!"));
+//     let p: web_sys::Node = document.create_element("p")?.into();
+//     p.set_text_content(Some("Hello from Rust, WebAssembly, and Webpack!"));
 
-    let body = document.body().expect("should have a body");
-    let body: &web_sys::Node = body.as_ref();
-    body.append_child(&p)?;
+//     let body = document.body().expect("should have a body");
+//     let body: &web_sys::Node = body.as_ref();
+//     body.append_child(&p)?;
 
-    Ok(())
-}
+//     Ok(())
+// }

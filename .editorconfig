@@ -1,7 +1,7 @@
 # http://editorconfig.org
 root = true
 
-[*.{ts,js,json,html,md}]
+[*.{ts,js,json,html,md,css}]
 # to match prettier defaults
 indent_style = space
 indent_size = 2
