@@ -54,6 +54,23 @@ import("../crate/pkg").then(module => {
     ctx.fill();
   }
 
+  function drawBallToHtml(ball) {
+    return `<div class="ball" style="position:absolute;top:${ball.y -
+      ball.radius}px;left:${ball.x -
+      ball.radius}px;background:#900000;width:${ball.radius *
+      2}px;height:${ball.radius * 2}px;border-radius:${ball.radius}px"></div>`;
+  }
+
+  const drawFunc = {
+    "js-render-canvas": function() {
+      canvasCtx.clearRect(0, 0, stage.width, stage.height);
+      balls.forEach(ball => drawBallToCtx(ball, canvasCtx));
+    },
+    "js-render-html": function() {
+      htmlRenderNode.innerHTML = balls.map(drawBallToHtml).join("");
+    }
+  };
+
   /**
    * Draw balls
    */
@@ -70,9 +87,8 @@ import("../crate/pkg").then(module => {
     cyclesNode.innerText = `Cycles: ${cycles} - Delta: ${delta.toFixed(
       4
     )} - FrameRate: ${Math.round(1000 / delta)} FPS`;
-    // canvas
-    canvasCtx.clearRect(0, 0, stage.width, stage.height);
-    balls.forEach(ball => drawBallToCtx(ball, canvasCtx));
+    // draw balls in selected mode
+    drawFunc[stage.mode]();
   }
 
   /**
@@ -91,7 +107,7 @@ import("../crate/pkg").then(module => {
   // Execution
 
   const { stage } = makeStage();
-  const { infosNode, cyclesNode, canvasCtx } = prepareUI(stage);
+  const { infosNode, cyclesNode, canvasCtx, htmlRenderNode } = prepareUI(stage);
 
   let delta = 0;
   let cycles = 0;

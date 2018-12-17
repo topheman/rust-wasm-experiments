@@ -1,20 +1,29 @@
+import { type } from "os";
+
 const DEBOUNCE_RESIZE_CANVAS_MS = 300;
 
 export function makeStage() {
-  const _stageElements = [];
-  const stage = { width: window.innerWidth, height: window.innerHeight };
+  const _trackers = [];
+  const stage = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    mode: "js-render-canvas" // default mode
+  };
   // track dom elements like canvas, div ... that will automatically be resized
-  stage.addElement = function(element) {
-    _stageElements.push(element);
-    element.width = stage.width;
-    element.height = stage.height;
+  stage.track = function(tracker) {
+    if (typeof tracker !== "function") {
+      throw new Error(
+        "Must be a function that will be called on window resize to update width / height"
+      );
+    }
+    tracker(stage);
+    _trackers.push(tracker);
   };
   const debouncedResizeToWindow = debounce(() => {
     stage.width = window.innerWidth;
     stage.height = window.innerHeight;
-    _stageElements.forEach(element => {
-      element.width = stage.width;
-      element.height = stage.height;
+    _trackers.forEach(tracker => {
+      tracker(stage);
     });
   }, DEBOUNCE_RESIZE_CANVAS_MS);
   window.addEventListener("resize", debouncedResizeToWindow, false);
