@@ -59,6 +59,8 @@ function makeRenderModeToggle(modes = [], stage) {
 export function prepareUI(stage) {
   const rootNode = document.getElementById("root");
   const infosNode = document.createElement("ul");
+  infosNode.style.overflowY = "scroll";
+  infosNode.style.maxHeight = "70vh";
   const cyclesNode = document.createElement("p");
   const htmlRenderNode = makeHtmlRenderNode();
   const canvasRenderNode = makeCanvasRenderNode();

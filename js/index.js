@@ -106,6 +106,8 @@ import("../crate/pkg").then(module => {
 
   // Execution
 
+  const MAX_BALLS = 20;
+
   const { stage } = makeStage();
   const { infosNode, cyclesNode, canvasCtx, htmlRenderNode } = prepareUI(stage);
 
@@ -113,12 +115,10 @@ import("../crate/pkg").then(module => {
   let cycles = 0;
   let lastFrameTimeMs = 0;
 
-  const balls = [
-    makeBall({ velocityX: 1, velocityY: 1 }),
-    makeBall({ velocityX: 4, velocityY: 1 }),
-    makeBall({ x: 300, y: 50, velocityX: -3, velocityY: 1 }),
-    makeBall({ x: 300, y: 200, velocityX: 7, velocityY: -5 })
-  ];
+  const balls = Array.from(Array(MAX_BALLS), _ => makeBall());
+  balls.forEach(ball => {
+    ball.setRandomPositionAndSpeedInBounds(stage.width, stage.height);
+  });
 
   loop();
 });

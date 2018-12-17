@@ -1,5 +1,3 @@
-import { type } from "os";
-
 const DEBOUNCE_RESIZE_CANVAS_MS = 300;
 
 export function makeStage() {

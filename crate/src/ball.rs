@@ -2,6 +2,13 @@ use wasm_bindgen::prelude::*;
 
 use std::default::Default;
 
+// retrieve the Math.random() function from JavaScript to use it inside rust code
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(js_namespace = Math)]
+    fn random() -> f64;
+}
+
 #[wasm_bindgen]
 #[derive(Debug)]
 pub struct Ball {
@@ -51,6 +58,15 @@ impl Ball {
             self.velocityY = -self.velocityY * self.elasticity;
             self.y = stageHeight as f64 - self.radius;
         }
+    }
+    pub fn setRandomPositionAndSpeedInBounds(&mut self, stageWidth: u32,stageHeight: u32) {
+        self.x = self.random() * stageWidth as f64;
+        self.y = self.random() * stageHeight as f64;
+        self.velocityX = self.random() * 10.0;
+        self.velocityY = self.random() * 10.0;
+    }
+    pub fn random(&self) -> f64 {
+        random()
     }
 }
 
