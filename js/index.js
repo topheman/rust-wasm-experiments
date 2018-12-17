@@ -1,4 +1,5 @@
-import { prepareCanvas } from "./canvas";
+import { makeStage } from "./utils";
+import { prepareUI } from "./ui";
 
 import("../crate/pkg").then(module => {
   /**
@@ -29,42 +30,6 @@ import("../crate/pkg").then(module => {
   }
 
   /**
-   * Callback to pass to `prepareCanvas` that will be executed when window is resized
-   */
-  function onCanvasResize({ width, height }) {
-    console.log("resize", { width, height });
-    stageWidth = width;
-    stageHeight = height;
-  }
-
-  /**
-   * Prepares UI
-   */
-  function prepare() {
-    const rootNode = document.getElementById("root");
-    const infosNode = document.createElement("ul");
-    const cyclesNode = document.createElement("p");
-    const htmlRenderNode = document.createElement("div");
-    const { canvas: canvasRenderNode } = prepareCanvas({
-      onResize: onCanvasResize
-    });
-    htmlRenderNode.className = "html-render";
-    rootNode.appendChild(infosNode);
-    rootNode.appendChild(cyclesNode);
-    rootNode.appendChild(canvasRenderNode);
-    rootNode.appendChild(htmlRenderNode);
-
-    return {
-      rootNode,
-      infosNode,
-      cyclesNode,
-      canvasRenderNode,
-      canvasCtx: canvasRenderNode.getContext("2d"),
-      htmlRenderNode
-    };
-  }
-
-  /**
    * Update balls states
    */
   function update(d) {
@@ -74,7 +39,7 @@ import("../crate/pkg").then(module => {
     balls.forEach(ball => ball.step());
     //check balls vs border collision
     balls.forEach(ball =>
-      ball.manageStageBorderCollision(stageWidth, stageHeight)
+      ball.manageStageBorderCollision(stage.width, stage.height)
     );
   }
 
@@ -106,7 +71,7 @@ import("../crate/pkg").then(module => {
       4
     )} - FrameRate: ${Math.round(1000 / delta)} FPS`;
     // canvas
-    canvasCtx.clearRect(0, 0, stageWidth, stageHeight);
+    canvasCtx.clearRect(0, 0, stage.width, stage.height);
     balls.forEach(ball => drawBallToCtx(ball, canvasCtx));
   }
 
@@ -125,6 +90,9 @@ import("../crate/pkg").then(module => {
 
   // Execution
 
+  const { stage } = makeStage();
+  const { infosNode, cyclesNode, canvasCtx } = prepareUI(stage);
+
   let delta = 0;
   let cycles = 0;
   let lastFrameTimeMs = 0;
@@ -135,10 +103,6 @@ import("../crate/pkg").then(module => {
     makeBall({ x: 300, y: 50, velocityX: -3, velocityY: 1 }),
     makeBall({ x: 300, y: 200, velocityX: 7, velocityY: -5 })
   ];
-
-  const { infosNode, cyclesNode, canvasCtx, canvasRenderNode } = prepare();
-  let stageWidth = canvasRenderNode.width;
-  let stageHeight = canvasRenderNode.height;
 
   loop();
 });
