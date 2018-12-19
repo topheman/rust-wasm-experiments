@@ -5,7 +5,7 @@ extern crate wasm_bindgen;
 
 mod ball;
 
-use wasm_bindgen::prelude::*;
+// use wasm_bindgen::prelude::*;
 
 cfg_if! {
     // When the `console_error_panic_hook` feature is enabled, we can call the
