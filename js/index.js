@@ -10,10 +10,10 @@ import("../crate/pkg").then(module => {
     y = 0,
     velocityX = 0,
     velocityY = 0,
-    radius = 10,
-    mass = 1,
+    radius = 15,
+    mass = 1.3,
     gravity = 1,
-    elasticity = 1,
+    elasticity = 0.4,
     friction = 1
   } = {}) {
     return new module.Ball(
@@ -37,7 +37,15 @@ import("../crate/pkg").then(module => {
     cycles++;
     // move balls
     balls.forEach(ball => ball.step());
-    //check balls vs border collision
+    // check ball vs ball collision
+    for (let i = 0; i < balls.length; i++) {
+      for (let j = i + 1; j < balls.length; j++) {
+        if (balls[i].checkBallCollision(balls[j]) === true) {
+          balls[i].resolveBallCollision(balls[j]);
+        }
+      }
+    }
+    // check balls vs border collision
     balls.forEach(ball =>
       ball.manageStageBorderCollision(stage.width, stage.height)
     );
@@ -106,7 +114,7 @@ import("../crate/pkg").then(module => {
 
   // Execution
 
-  const MAX_BALLS = 20;
+  const MAX_BALLS = 10;
 
   const { stage } = makeStage();
   const { infosNode, cyclesNode, canvasCtx, htmlRenderNode } = prepareUI(stage);
@@ -122,3 +130,4 @@ import("../crate/pkg").then(module => {
 
   loop();
 });
+// ⚠️ TODO ADD .catch

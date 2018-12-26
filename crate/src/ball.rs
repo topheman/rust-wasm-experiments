@@ -1,6 +1,7 @@
 use wasm_bindgen::prelude::*;
 
 use std::default::Default;
+use vector2D::Vector2D;
 
 // retrieve the Math.random() function from JavaScript to use it inside rust code
 #[wasm_bindgen]
@@ -60,12 +61,68 @@ impl Ball {
             self.y = stage_height as f64 - self.radius;
         }
     }
+    #[wasm_bindgen(js_name=checkBallCollision)]
+    pub fn check_ball_collision(&self, ball: &Ball) -> bool {
+        let xd = self.x - ball.x;
+        let yd = self.y - ball.y;
+
+        let sum_radius = self.radius + ball.radius;
+        let sqr_radius = sum_radius * sum_radius;
+
+        let dist_sqr = (xd * xd) + (yd * yd);
+
+        if dist_sqr <= sqr_radius {
+            return true;
+        }
+        return false;
+    }
+    #[wasm_bindgen(js_name=resolveBallCollision)]
+    pub fn resolve_ball_collision(&mut self, ball: &mut Ball) {
+        let RESTITUTION = 0.85;
+        // let RESTITUTION = 0.5;
+
+        //get the mtd
+        let delta = self.get_vector_2d(&*ball);
+        let d = delta.get_length();
+        // minimum translation distance to push balls apart after intersecting
+        let mtd = delta.scale(((self.radius + ball.radius)-d)/d);
+
+        // resolve intersection --
+        // inverse mass quantities
+        let im1 = 1.0/self.mass;
+        let im2 = 1.0/ball.mass;
+
+        // impact speed
+        let vector_velocity = Vector2D::new(self.velocity_x - ball.velocity_x, self.velocity_y - ball.velocity_y);
+        let vn = vector_velocity.dot(mtd.normalize());
+
+        // sphere intersecting but moving away from each other already
+        if vn > 0.0 {
+            return;
+        }
+
+        // collision impulse
+        let i = (-(1.0 + RESTITUTION) * vn) / (im1 + im2);
+        let impulse = mtd.scale(i);
+
+        // change in momentum
+        let ims1 = impulse.scale(im1);
+        let ims2 = impulse.scale(im2);
+
+        self.velocity_x = (self.velocity_x + ims1.x) * self.elasticity;
+        self.velocity_y = (self.velocity_y + ims1.y) * self.elasticity;
+        ball.velocity_x = (ball.velocity_x - ims2.x) * self.elasticity;
+        ball.velocity_y = (ball.velocity_y - ims2.y) * self.elasticity;
+    }
     #[wasm_bindgen(js_name=setRandomPositionAndSpeedInBounds)]
     pub fn set_random_position_and_speed_in_bounds(&mut self, stage_width: u32,stage_height: u32) {
         self.x = self.random() * stage_width as f64;
         self.y = self.random() * stage_height as f64;
         self.velocity_x = self.random() * 10.0;
         self.velocity_y = self.random() * 10.0;
+    }
+    fn get_vector_2d (&self, ball: &Ball) -> Vector2D {
+        Vector2D::new(self.x - ball.x, self.y - ball.y)
     }
     pub fn random(&self) -> f64 {
         random()

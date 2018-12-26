@@ -4,6 +4,7 @@ extern crate web_sys;
 extern crate wasm_bindgen;
 
 mod ball;
+mod vector2D;
 
 // use wasm_bindgen::prelude::*;
 
