@@ -39,16 +39,16 @@ impl Ball {
         self.velocity_y = self.friction * self.velocity_y;
     }
     #[wasm_bindgen(js_name=manageStageBorderCollision)]
-    pub fn manage_stage_border_collision(&mut self, stage_width: u32, stage_height: u32) {
+    pub fn manage_stage_border_collision(&mut self, stage_width: f64, stage_height: f64) {
         // left border
         if self.x - self.radius < 0.0 {
             self.velocity_x = -self.velocity_x * self.elasticity;
             self.x = self.radius;
         }
         // right border
-        if self.x + self.radius > stage_width as f64 {
+        if self.x + self.radius > stage_width {
             self.velocity_x = -self.velocity_x * self.elasticity;
-            self.x = stage_width as f64 - self.radius;
+            self.x = stage_width - self.radius;
         }
         // top border
         if self.y - self.radius < 0.0 {
@@ -56,9 +56,9 @@ impl Ball {
             self.y = self.radius;
         }
         // bottom border
-        if self.y + self.radius > stage_height as f64 {
+        if self.y + self.radius > stage_height {
             self.velocity_y = -self.velocity_y * self.elasticity;
-            self.y = stage_height as f64 - self.radius;
+            self.y = stage_height - self.radius;
         }
     }
     #[wasm_bindgen(js_name=checkBallCollision)]
@@ -115,9 +115,9 @@ impl Ball {
         ball.velocity_y = (ball.velocity_y - ims2.y) * self.elasticity;
     }
     #[wasm_bindgen(js_name=setRandomPositionAndSpeedInBounds)]
-    pub fn set_random_position_and_speed_in_bounds(&mut self, stage_width: u32,stage_height: u32) {
-        self.x = self.random() * stage_width as f64;
-        self.y = self.random() * stage_height as f64;
+    pub fn set_random_position_and_speed_in_bounds(&mut self, stage_width: f64,stage_height: f64) {
+        self.x = self.random() * stage_width;
+        self.y = self.random() * stage_height;
         self.velocity_x = self.random() * 10.0;
         self.velocity_y = self.random() * 10.0;
     }
