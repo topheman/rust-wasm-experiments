@@ -5,7 +5,7 @@ export function makeStage() {
   const stage = {
     width: window.innerWidth,
     height: window.innerHeight,
-    mode: "js-render-canvas" // default mode
+    mode: "wasm-compute-js-render-canvas" // default mode
   };
   // track dom elements like canvas, div ... that will automatically be resized
   stage.track = function(tracker) {
