@@ -1,14 +1,16 @@
 import { makeStage } from "./utils";
 import { prepareUI } from "./ui";
+import OldBall from "./OldBall";
 
 const BALL_MASS = 1.3;
 const BALL_GRAVITY = 1;
-const BALL_ELASTICITY = 0.4;
+const BALL_ELASTICITY = 0.98;
 const BALL_FRICTION = 1;
 
 import("../crate/pkg").then(module => {
   /**
-   * Wrapper for wasm Ball constructor with defaults
+   * Factory that will return either the original JavaScript version or the WebAssembly one
+   * Specify a `wasm` boolean as an attribute to choose either version
    */
   function makeBall({
     x = 0,
@@ -19,8 +21,21 @@ import("../crate/pkg").then(module => {
     mass = BALL_MASS,
     gravity = BALL_GRAVITY,
     elasticity = BALL_ELASTICITY,
-    friction = BALL_FRICTION
+    friction = BALL_FRICTION,
+    wasm = true
   } = {}) {
+    if (!wasm) {
+      return new OldBall(
+        x,
+        y,
+        radius,
+        mass,
+        gravity,
+        elasticity,
+        friction,
+        "blue"
+      );
+    }
     return new module.Ball(
       x,
       y,
