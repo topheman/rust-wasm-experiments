@@ -1,6 +1,11 @@
 import { makeStage } from "./utils";
 import { prepareUI } from "./ui";
 
+const BALL_MASS = 1.3;
+const BALL_GRAVITY = 1;
+const BALL_ELASTICITY = 0.4;
+const BALL_FRICTION = 1;
+
 import("../crate/pkg").then(module => {
   /**
    * Wrapper for wasm Ball constructor with defaults
@@ -11,10 +16,10 @@ import("../crate/pkg").then(module => {
     velocityX = 0,
     velocityY = 0,
     radius = 15,
-    mass = 1.3,
-    gravity = 1,
-    elasticity = 0.4,
-    friction = 1
+    mass = BALL_MASS,
+    gravity = BALL_GRAVITY,
+    elasticity = BALL_ELASTICITY,
+    friction = BALL_FRICTION
   } = {}) {
     return new module.Ball(
       x,
@@ -37,6 +42,10 @@ import("../crate/pkg").then(module => {
     cycles++;
     // move balls
     balls.forEach(ball => ball.step());
+    // check balls vs border collision
+    balls.forEach(ball =>
+      ball.manageStageBorderCollision(stage.width, stage.height)
+    );
     // check ball vs ball collision
     for (let i = 0; i < balls.length; i++) {
       for (let j = i + 1; j < balls.length; j++) {
@@ -45,10 +54,6 @@ import("../crate/pkg").then(module => {
         }
       }
     }
-    // check balls vs border collision
-    balls.forEach(ball =>
-      ball.manageStageBorderCollision(stage.width, stage.height)
-    );
   }
 
   /**
@@ -117,7 +122,10 @@ import("../crate/pkg").then(module => {
   const MAX_BALLS = 10;
 
   const { stage } = makeStage();
-  const { infosNode, cyclesNode, canvasCtx, htmlRenderNode } = prepareUI(stage);
+  const { infosNode, cyclesNode, canvasCtx, htmlRenderNode } = prepareUI(
+    stage,
+    { BALL_MASS, BALL_GRAVITY, BALL_ELASTICITY, BALL_FRICTION }
+  );
 
   let delta = 0;
   let cycles = 0;
