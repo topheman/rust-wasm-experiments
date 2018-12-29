@@ -8,6 +8,8 @@ use vector2D::Vector2D;
 extern "C" {
     #[wasm_bindgen(js_namespace = Math)]
     fn random() -> f64;
+    // #[wasm_bindgen(js_namespace = console)]
+    // fn log(message: String);
 }
 
 #[wasm_bindgen]
@@ -94,7 +96,8 @@ impl Ball {
 
         // impact speed
         let vector_velocity = Vector2D::new(self.velocity_x - ball.velocity_x, self.velocity_y - ball.velocity_y);
-        let vn = vector_velocity.dot(mtd.normalize());
+        let normalized_mtd = mtd.normalize();
+        let vn = vector_velocity.dot(&normalized_mtd);
 
         // sphere intersecting but moving away from each other already
         if vn > 0.0 {
@@ -103,7 +106,7 @@ impl Ball {
 
         // collision impulse
         let i = (-(1.0 + RESTITUTION) * vn) / (im1 + im2);
-        let impulse = mtd.scale(i);
+        let impulse = normalized_mtd.scale(i);
 
         // change in momentum
         let ims1 = impulse.scale(im1);

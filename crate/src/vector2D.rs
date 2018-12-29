@@ -11,6 +11,9 @@ extern "C" {
     fn sqrt(num: f64) -> f64;
 }
 
+/**
+ * Light / Immutable version of Vector2D
+ */
 impl Vector2D {
     pub fn new(x: f64, y: f64) -> Vector2D {
         Vector2D { x, y }
@@ -20,7 +23,7 @@ impl Vector2D {
         // Currently using Math.sqrt from the browser - consider using rust implementation ?
         // (self.x * self.x + self.y * self.y).sqrt()
     }
-    pub fn dot(&self, vector: Vector2D) -> f64 {
+    pub fn dot(&self, vector: &Vector2D) -> f64 {
         self.x * vector.x + self.y * vector.y
     }
     #[warn(dead_code)]
