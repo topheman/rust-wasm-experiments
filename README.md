@@ -1,5 +1,7 @@
 # rust-wasm-experiments
 
+Bouncing balls algorithm (handling physics interactions between balls) implemented in both plain JavaScript and Rust/WebAssembly.
+
 Generated with `npm init rust-webpack` from [rust-webpack-template](https://github.com/rustwasm/rust-webpack-template). [Original README available here](README.rwt.md).
 
 ## Install
@@ -56,3 +58,4 @@ This will create a `pkg` folder containing:
 ## Resources
 
 - [First attempt](https://github.com/topheman/webassembly-first-try/tree/master/03-rust-webpack-template) (simplier version)
+- [Ball.js](https://github.com/topheman/Ball.js) original algo handling bouncing balls made a few years ago

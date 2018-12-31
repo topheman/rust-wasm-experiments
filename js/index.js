@@ -1,6 +1,6 @@
 import { makeStage } from "./utils";
 import { prepareUI } from "./ui";
-import BallJS from "./old/Ball";
+import BallJS from "./libs/Ball";
 
 const BALL_MASS = 1.3;
 const BALL_GRAVITY = 1;
@@ -24,10 +24,7 @@ import("../crate/pkg").then(module => {
     friction = BALL_FRICTION,
     wasm = true
   } = {}) {
-    if (!wasm) {
-      return new BallJS(x, y, radius, mass, gravity, elasticity, friction, "");
-    }
-    return new module.Ball(
+    return new (wasm ? module.Ball : BallJS)(
       x,
       y,
       velocityX,

@@ -1,3 +1,9 @@
+/**
+ * Rust implementation of https://github.com/topheman/Ball.js
+ * 
+ * Same exact implementation as the JavaScript one in the ./js/libs folder
+ */
+
 use wasm_bindgen::prelude::*;
 
 use std::default::Default;
