@@ -131,7 +131,9 @@ import("../crate/pkg")
     const MAX_BALLS = 10;
 
     const { stage } = makeStage();
-    const { infosNode, canvasCtx, htmlRenderNode } = prepareUI(stage);
+    const { infosNode, canvasCtx, htmlRenderNode, shuffleButton } = prepareUI(
+      stage
+    );
 
     let delta = 0;
     let lastFrameTimeMs = 0;
@@ -140,13 +142,19 @@ import("../crate/pkg")
       wasm: Array.from(Array(MAX_BALLS), _ => makeBall()),
       js: Array.from(Array(MAX_BALLS), _ => makeBall({ wasm: false }))
     };
-    balls["wasm"].forEach(ball => {
-      ball.setRandomPositionAndSpeedInBounds(stage.width, stage.height);
-    });
-    balls["js"].forEach(ball => {
-      ball.setRandomPositionAndSpeedInBounds(stage.width, stage.height);
-    });
 
+    const shuffle = () => {
+      balls["wasm"].forEach(ball => {
+        ball.setRandomPositionAndSpeedInBounds(stage.width, stage.height);
+      });
+      balls["js"].forEach(ball => {
+        ball.setRandomPositionAndSpeedInBounds(stage.width, stage.height);
+      });
+    };
+
+    shuffleButton.onclick = shuffle;
+
+    shuffle();
     loop();
   })
   .catch(error => {

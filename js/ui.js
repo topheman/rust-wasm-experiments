@@ -65,6 +65,10 @@ function makeRenderModeToggle(modes = [], stage) {
 export function prepareUI(stage) {
   const rootNode = document.getElementById("root");
   const infosNode = document.createElement("p");
+  const shuffleButton = document.createElement("button");
+  shuffleButton.innerText = "SHUFFLE";
+  const shuffleWrapperNode = document.createElement("p");
+  shuffleWrapperNode.append(shuffleButton);
   const htmlRenderNode = makeHtmlRenderNode();
   const canvasRenderNode = makeCanvasRenderNode();
   stage.track(({ width, height }) => {
@@ -98,12 +102,14 @@ export function prepareUI(stage) {
   );
   rootNode.appendChild(renderModeToggles);
   rootNode.appendChild(infosNode);
+  rootNode.appendChild(shuffleWrapperNode);
   rootNode.appendChild(canvasRenderNode);
   rootNode.appendChild(htmlRenderNode);
 
   return {
     rootNode,
     infosNode,
+    shuffleButton,
     canvasRenderNode,
     canvasCtx: canvasRenderNode.getContext("2d"),
     htmlRenderNode
