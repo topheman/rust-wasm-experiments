@@ -54,7 +54,12 @@ function makeRenderModeToggle(modes = [], stage) {
   inputs.forEach(input => ul.appendChild(input));
   ul.style.listStyle = "none";
   ul.style.paddingLeft = "20px";
-  return ul;
+  const p = document.createElement("p");
+  p.innerText = "Choose an implementation between JavaScript and Rust/WASM:";
+  const div = document.createElement("div");
+  div.appendChild(p);
+  div.appendChild(ul);
+  return div;
 }
 
 export function prepareUI(stage) {
