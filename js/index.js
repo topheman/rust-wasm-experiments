@@ -59,7 +59,6 @@ import("../crate/pkg").then(module => {
    */
   function update(d) {
     delta = d;
-    cycles++;
     updateBalls(balls["wasm"]);
     updateBalls(balls["js"]);
   }
@@ -107,18 +106,9 @@ import("../crate/pkg").then(module => {
    * Draw balls
    */
   function draw() {
-    // infos `wasm` or `js` (always at the beginning of mode)
-    infosNode.innerHTML = balls[stage.mode.split("-").shift()]
-      .map(
-        (ball, index) =>
-          `<li>x: ${ball.x.toFixed(3)} / y: ${ball.y.toFixed(
-            3
-          )} | index: ${index}</li>`
-      )
-      .join("");
-    cyclesNode.innerText = `Cycles: ${cycles} - Delta: ${delta.toFixed(
+    infosNode.innerText = `Delta: ${delta.toFixed(
       4
-    )} - FrameRate: ${Math.round(1000 / delta)} FPS`;
+    )}ms - FrameRate: ${Math.round(1000 / delta)} FPS`;
     // draw balls in selected mode
     drawFunc[stage.mode]();
   }
@@ -127,9 +117,6 @@ import("../crate/pkg").then(module => {
    * Game loop
    */
   function loop(timestamp) {
-    if (cycles >= 4000) {
-      return cancelAnimationFrame(loop);
-    }
     requestAnimationFrame(loop);
     update(timestamp - lastFrameTimeMs);
     draw();
@@ -141,13 +128,9 @@ import("../crate/pkg").then(module => {
   const MAX_BALLS = 10;
 
   const { stage } = makeStage();
-  const { infosNode, cyclesNode, canvasCtx, htmlRenderNode } = prepareUI(
-    stage,
-    { BALL_MASS, BALL_GRAVITY, BALL_ELASTICITY, BALL_FRICTION }
-  );
+  const { infosNode, canvasCtx, htmlRenderNode } = prepareUI(stage);
 
   let delta = 0;
-  let cycles = 0;
   let lastFrameTimeMs = 0;
 
   const balls = {

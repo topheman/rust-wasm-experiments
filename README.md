@@ -1,6 +1,14 @@
 # rust-wasm-experiments
 
+[![Demo](https://img.shields.io/badge/demo-online-blue.svg)](https://topheman.github.io/rust-wasm-experiments/)
+
 Bouncing balls algorithm (handling physics interactions between balls) implemented in both plain JavaScript and Rust/WebAssembly.
+
+Discover how to use Rust to generate WebAssembly, called by JavaScript.
+
+- [`./crate/src`](crate/src): Rust implementation of [Ball.js](https://github.com/topheman/Ball.js)
+- `./crate/pkg`: Generated WebAssembly code (with JavaScript glue code from wasm-bindgen)
+- [`./js`](js): JavaScript code
 
 Generated with `npm init rust-webpack` from [rust-webpack-template](https://github.com/rustwasm/rust-webpack-template). [Original README available here](README.rwt.md).
 

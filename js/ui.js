@@ -57,14 +57,9 @@ function makeRenderModeToggle(modes = [], stage) {
   return ul;
 }
 
-export function prepareUI(stage, options = {}) {
+export function prepareUI(stage) {
   const rootNode = document.getElementById("root");
-  const infosNode = document.createElement("ul");
-  infosNode.style.overflowY = "scroll";
-  infosNode.style.maxHeight = "70vh";
-  const cyclesNode = document.createElement("p");
-  const optionsNode = document.createElement("pre");
-  optionsNode.innerText = JSON.stringify(options);
+  const infosNode = document.createElement("p");
   const htmlRenderNode = makeHtmlRenderNode();
   const canvasRenderNode = makeCanvasRenderNode();
   stage.track(({ width, height }) => {
@@ -96,17 +91,14 @@ export function prepareUI(stage, options = {}) {
     ],
     stage
   );
+  rootNode.appendChild(renderModeToggles);
   rootNode.appendChild(infosNode);
-  rootNode.appendChild(cyclesNode);
-  rootNode.appendChild(optionsNode);
   rootNode.appendChild(canvasRenderNode);
   rootNode.appendChild(htmlRenderNode);
-  rootNode.appendChild(renderModeToggles);
 
   return {
     rootNode,
     infosNode,
-    cyclesNode,
     canvasRenderNode,
     canvasCtx: canvasRenderNode.getContext("2d"),
     htmlRenderNode
