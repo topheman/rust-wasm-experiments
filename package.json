@@ -7,13 +7,15 @@
   "scripts": {
     "start": "webpack-dev-server -d",
     "build": "webpack --mode production",
-    "serve": "serve ./dist"
+    "serve": "serve ./dist",
+    "deploy": "gh-pages -d dist"
   },
   "bin": {
     "create-rust-webpack": ".bin/create-rust-webpack.js"
   },
   "devDependencies": {
     "@wasm-tool/wasm-pack-plugin": "0.1.6",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
     "serve": "^10.1.1",
     "webpack": "^4.27.1",
