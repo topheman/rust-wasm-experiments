@@ -4,7 +4,7 @@
  * Same exact implementation as the Rust/Wasm one in the ./crate folder
  */
 
-import Vector2D from "./vector2D";
+import Vector2D from "./Vector2D";
 
 class Ball {
   constructor(
