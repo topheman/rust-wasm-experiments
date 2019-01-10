@@ -2,6 +2,8 @@ import { makeStage } from "./utils";
 import { prepareUI } from "./ui";
 import BallJS from "./libs/Ball";
 
+const urlParam = require('urlparam');
+
 const BALL_MASS = 1.3;
 const BALL_GRAVITY = 1;
 const BALL_ELASTICITY = 0.98;
@@ -60,8 +62,16 @@ import("../crate/pkg")
      */
     function update(d) {
       delta = d;
-      updateBalls(balls["wasm"]);
-      updateBalls(balls["js"]);
+      switch (stage.mode) {
+        case "wasm-compute-js-render-canvas":
+        case "wasm-compute-js-render-html":
+          updateBalls(balls["wasm"]);
+          break;
+        case "js-compute-js-render-canvas":
+        case "js-compute-js-render-html":
+          updateBalls(balls["js"]);
+          break;
+      }
     }
 
     /**
@@ -81,24 +91,24 @@ import("../crate/pkg")
         ball.radius}px;background:${color};width:${ball.radius *
         2}px;height:${ball.radius * 2}px;border-radius:${
         ball.radius
-      }px"></div>`;
+        }px"></div>`;
     }
 
     const drawFunc = {
-      "wasm-compute-js-render-canvas": function() {
+      "wasm-compute-js-render-canvas": function () {
         canvasCtx.clearRect(0, 0, stage.width, stage.height);
         balls["wasm"].forEach(ball => drawBallToCtx(ball, canvasCtx, "blue"));
       },
-      "wasm-compute-js-render-html": function() {
+      "wasm-compute-js-render-html": function () {
         htmlRenderNode.innerHTML = balls["wasm"]
           .map(ball => drawBallToHtml(ball, "darkblue"))
           .join("");
       },
-      "js-compute-js-render-canvas": function() {
+      "js-compute-js-render-canvas": function () {
         canvasCtx.clearRect(0, 0, stage.width, stage.height);
         balls["js"].forEach(ball => drawBallToCtx(ball, canvasCtx, "red"));
       },
-      "js-compute-js-render-html": function() {
+      "js-compute-js-render-html": function () {
         htmlRenderNode.innerHTML = balls["js"]
           .map(ball => drawBallToHtml(ball, "darkred"))
           .join("");
@@ -128,7 +138,7 @@ import("../crate/pkg")
 
     // Execution
 
-    const MAX_BALLS = 10;
+    const MAX_BALLS = urlParam("balls", 100, true);
 
     const { stage } = makeStage();
     const { infosNode, canvasCtx, htmlRenderNode, shuffleButton } = prepareUI(

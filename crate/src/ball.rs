@@ -92,6 +92,9 @@ impl Ball {
         //get the mtd
         let delta = self.get_vector_2d(&*ball);
         let d = delta.get_length();
+
+        if (d == 0) return;
+        
         // minimum translation distance to push balls apart after intersecting
         let mtd = delta.scale(((self.radius + ball.radius)-d)/d);
 

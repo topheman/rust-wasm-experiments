@@ -8,119 +8,143 @@ import Vector2D from "./Vector2D";
 
 class Ball {
   constructor(
-    x,
-    y,
-    velocity_x,
-    velocity_y,
-    radius,
-    mass,
-    gravity,
-    elasticity,
-    friction
+    _x,
+    _y,
+    _velocity_x,
+    _velocity_y,
+    _radius,
+    _mass,
+    _gravity,
+    _elasticity,
+    _friction
   ) {
-    this.x = x;
-    this.y = y;
-    this.velocity_x = velocity_x;
-    this.velocity_y = velocity_y;
-    this.radius = radius;
-    this.mass = mass;
-    this.gravity = gravity;
-    this.elasticity = elasticity;
-    this.friction = friction;
-  }
-  step() {
-    this.x = this.x + this.gravity * this.velocity_x;
-    this.y = this.y + this.gravity * this.velocity_y;
-    this.velocity_x = this.friction * this.velocity_x;
-    this.velocity_y = this.friction * this.velocity_y;
-  }
-  manageStageBorderCollision(stage_width, stage_height) {
-    // left border
-    if (this.x - this.radius < 0.0) {
-      this.velocity_x = -this.velocity_x * this.elasticity;
-      this.x = this.radius;
+    function step() {
+      _x = _x + _gravity * _velocity_x;
+      _y = _y + _gravity * _velocity_y;
+      _velocity_x = _friction * _velocity_x;
+      _velocity_y = _friction * _velocity_y;
+      if (isNaN(_x)) debugger;
     }
-    // right border
-    if (this.x + this.radius > stage_width) {
-      this.velocity_x = -this.velocity_x * this.elasticity;
-      this.x = stage_width - this.radius;
+    function manageStageBorderCollision(stage_width, stage_height) {
+      // left border
+      if (_x - _radius < 0.0) {
+        _velocity_x = -_velocity_x * _elasticity;
+        _x = _radius;
+      }
+      // right border
+      if (_x + _radius > stage_width) {
+        _velocity_x = -_velocity_x * _elasticity;
+        _x = stage_width - _radius;
+      }
+      // top border
+      if (_y - _radius < 0.0) {
+        _velocity_y = -_velocity_y * _elasticity;
+        _y = _radius;
+      }
+      // bottom border
+      if (_y + _radius > stage_height) {
+        _velocity_y = -_velocity_y * _elasticity;
+        _y = stage_height - _radius;
+      }
     }
-    // top border
-    if (this.y - this.radius < 0.0) {
-      this.velocity_y = -this.velocity_y * this.elasticity;
-      this.y = this.radius;
+    function checkBallCollision(ball) {
+      const xd = _x - ball.x;
+      const yd = _y - ball.y;
+
+      const sum_radius = _radius + ball.radius;
+      const sqr_radius = sum_radius * sum_radius;
+
+      const dist_sqr = xd * xd + yd * yd;
+
+      if (dist_sqr <= sqr_radius) {
+        return true;
+      }
+      return false;
     }
-    // bottom border
-    if (this.y + this.radius > stage_height) {
-      this.velocity_y = -this.velocity_y * this.elasticity;
-      this.y = stage_height - this.radius;
+    function resolveBallCollision(ball) {
+      const RESTITUTION = 0.85;
+
+      //get the mtd
+      const delta = get_vector_2d(ball);
+      const d = delta.get_length();
+
+      if (d == 0) return;
+
+      // minimum translation distance to push balls apart after intersecting
+      const mtd = delta.scale((_radius + ball.radius - d) / d);
+
+      // resolve intersection --
+      // inverse mass quantities
+      const im1 = 1 / _mass;
+      const im2 = 1 / ball.mass;
+
+      // impact speed
+      const vector_velocity = new Vector2D(
+        _velocity_x - ball.velocity_x,
+        _velocity_y - ball.velocity_y
+      );
+      const normalized_mtd = mtd.normalize();
+      const vn = vector_velocity.dot(normalized_mtd);
+
+      // sphere intersecting but moving away from each other already
+      if (vn > 0.0) {
+        return;
+      }
+
+      // collision impulse
+      const i = (-(1.0 + RESTITUTION) * vn) / (im1 + im2);
+      const impulse = normalized_mtd.scale(i);
+
+      // change in momentum
+      const ims1 = impulse.scale(im1);
+      const ims2 = impulse.scale(im2);
+
+      _velocity_x = (_velocity_x + ims1.x) * _elasticity;
+      _velocity_y = (_velocity_y + ims1.y) * _elasticity;
+      ball.velocity_x = (ball.velocity_x - ims2.x) * _elasticity;
+      ball.velocity_y = (ball.velocity_y - ims2.y) * _elasticity;
     }
-  }
-  checkBallCollision(ball) {
-    const xd = this.x - ball.x;
-    const yd = this.y - ball.y;
-
-    const sum_radius = this.radius + ball.radius;
-    const sqr_radius = sum_radius * sum_radius;
-
-    const dist_sqr = xd * xd + yd * yd;
-
-    if (dist_sqr <= sqr_radius) {
-      return true;
+    function setRandomPositionAndSpeedInBounds(stage_width, stage_height) {
+      _x = random() * stage_width;
+      _y = random() * stage_height;
+      _velocity_x = random() * 10;
+      _velocity_y = random() * 10;
     }
-    return false;
-  }
-  resolveBallCollision(ball) {
-    const RESTITUTION = 0.85;
-
-    //get the mtd
-    const delta = this.get_vector_2d(ball);
-    const d = delta.get_length();
-    // minimum translation distance to push balls apart after intersecting
-    const mtd = delta.scale((this.radius + ball.radius - d) / d);
-
-    // resolve intersection --
-    // inverse mass quantities
-    const im1 = 1 / this.mass;
-    const im2 = 1 / ball.mass;
-
-    // impact speed
-    const vector_velocity = new Vector2D(
-      this.velocity_x - ball.velocity_x,
-      this.velocity_y - ball.velocity_y
-    );
-    const normalized_mtd = mtd.normalize();
-    const vn = vector_velocity.dot(normalized_mtd);
-
-    // sphere intersecting but moving away from each other already
-    if (vn > 0.0) {
-      return;
+    function get_vector_2d(ball) {
+      return new Vector2D(_x - ball.x, _y - ball.y);
+    }
+    function random() {
+      return Math.random();
     }
 
-    // collision impulse
-    const i = (-(1.0 + RESTITUTION) * vn) / (im1 + im2);
-    const impulse = normalized_mtd.scale(i);
-
-    // change in momentum
-    const ims1 = impulse.scale(im1);
-    const ims2 = impulse.scale(im2);
-
-    this.velocity_x = (this.velocity_x + ims1.x) * this.elasticity;
-    this.velocity_y = (this.velocity_y + ims1.y) * this.elasticity;
-    ball.velocity_x = (ball.velocity_x - ims2.x) * this.elasticity;
-    ball.velocity_y = (ball.velocity_y - ims2.y) * this.elasticity;
-  }
-  setRandomPositionAndSpeedInBounds(stage_width, stage_height) {
-    this.x = this.random() * stage_width;
-    this.y = this.random() * stage_height;
-    this.velocity_x = this.random() * 10;
-    this.velocity_y = this.random() * 10;
-  }
-  get_vector_2d(ball) {
-    return new Vector2D(this.x - ball.x, this.y - ball.y);
-  }
-  random() {
-    return Math.random();
+    //expose public methods and properties
+    this.setRandomPositionAndSpeedInBounds = setRandomPositionAndSpeedInBounds;
+    this.step = step;
+    this.manageStageBorderCollision = manageStageBorderCollision;
+    this.checkBallCollision = checkBallCollision;
+    this.resolveBallCollision = resolveBallCollision;
+    Object.defineProperties(this, {
+      radius: {
+        get: () => _radius
+      },
+      x: {
+        get: () => _x
+      },
+      y: {
+        get: () => _y
+      },
+      mass: {
+        get: () => _mass
+      },
+      velocity_x: {
+        get: () => _velocity_x,
+        set: value => _velocity_x = value
+      },
+      velocity_y: {
+        get: () => _velocity_y,
+        set: value => _velocity_y = value
+      }
+    });
   }
 }
 
