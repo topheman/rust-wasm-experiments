@@ -5,6 +5,7 @@ extern crate wasm_bindgen;
 
 mod ball;
 mod vector2D;
+mod render;
 
 // use wasm_bindgen::prelude::*;
 

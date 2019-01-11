@@ -67,7 +67,7 @@ import("../crate/pkg")
     /**
      * Helper to draw a ball directly with JavaScript code
      */
-    function drawBallToCtx(ball, ctx, color = "#900000") {
+    function drawJsBallToCtx(ball, ctx, color = "#900000") {
       ctx.fillStyle = color;
       ctx.beginPath();
       ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
@@ -75,7 +75,7 @@ import("../crate/pkg")
       ctx.fill();
     }
 
-    function drawBallToHtml(ball, color = "#900000") {
+    function drawJsBallToHtml(ball, color = "#900000") {
       return `<div class="ball" style="position:absolute;top:${ball.y -
         ball.radius}px;left:${ball.x -
         ball.radius}px;background:${color};width:${ball.radius *
@@ -85,22 +85,33 @@ import("../crate/pkg")
     }
 
     const drawFunc = {
+      "wasm-compute-wasm-render-canvas": function() {
+        canvasCtx.clearRect(0, 0, stage.width, stage.height);
+        balls["wasm"].forEach(ball =>
+          module.drawWasmBallToCtx(ball, canvasCtx, "purple")
+        );
+      },
+      "wasm-compute-wasm-render-html": function() {
+        htmlRenderNode.innerHTML = balls["wasm"]
+          .map(ball => module.drawWasmBallToHtml(ball, "green"))
+          .join("");
+      },
       "wasm-compute-js-render-canvas": function() {
         canvasCtx.clearRect(0, 0, stage.width, stage.height);
-        balls["wasm"].forEach(ball => drawBallToCtx(ball, canvasCtx, "blue"));
+        balls["wasm"].forEach(ball => drawJsBallToCtx(ball, canvasCtx, "blue"));
       },
       "wasm-compute-js-render-html": function() {
         htmlRenderNode.innerHTML = balls["wasm"]
-          .map(ball => drawBallToHtml(ball, "darkblue"))
+          .map(ball => drawJsBallToHtml(ball, "darkblue"))
           .join("");
       },
       "js-compute-js-render-canvas": function() {
         canvasCtx.clearRect(0, 0, stage.width, stage.height);
-        balls["js"].forEach(ball => drawBallToCtx(ball, canvasCtx, "red"));
+        balls["js"].forEach(ball => drawJsBallToCtx(ball, canvasCtx, "red"));
       },
       "js-compute-js-render-html": function() {
         htmlRenderNode.innerHTML = balls["js"]
-          .map(ball => drawBallToHtml(ball, "darkred"))
+          .map(ball => drawJsBallToHtml(ball, "darkred"))
           .join("");
       }
     };

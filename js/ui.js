@@ -1,7 +1,7 @@
 function makeCanvasRenderNode() {
   const canvas = document.createElement("canvas");
   canvas.className =
-    "wasm-compute-js-render-canvas js-compute-js-render-canvas";
+    "wasm-compute-wasm-render-canvas wasm-compute-js-render-canvas js-compute-js-render-canvas";
   canvas.style.position = "absolute";
   canvas.style.top = "0px";
   canvas.style.left = "0px";
@@ -11,7 +11,8 @@ function makeCanvasRenderNode() {
 
 function makeHtmlRenderNode() {
   const div = document.createElement("div");
-  div.className = "wasm-compute-js-render-html js-compute-js-render-html";
+  div.className =
+    "wasm-compute-wasm-render-html wasm-compute-js-render-html js-compute-js-render-html";
   div.style.position = "absolute";
   div.style.top = "0px";
   div.style.left = "0px";
@@ -81,6 +82,16 @@ export function prepareUI(stage) {
   });
   const renderModeToggles = makeRenderModeToggle(
     [
+      {
+        value: "wasm-compute-wasm-render-canvas",
+        label:
+          "compute by WASM - render by WASM into canvas (iteration still in JS)"
+      },
+      {
+        value: "wasm-compute-wasm-render-html",
+        label:
+          "compute by WASM - render by WASM into html (iteration still in JS)"
+      },
       {
         value: "wasm-compute-js-render-canvas",
         label: "compute by WASM - render by JS into canvas"
