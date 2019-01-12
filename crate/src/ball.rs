@@ -1,9 +1,8 @@
 /**
  * Rust implementation of https://github.com/topheman/Ball.js
- * 
+ *
  * Same exact implementation as the JavaScript one in the ./js/libs folder
  */
-
 use wasm_bindgen::prelude::*;
 
 use std::default::Default;
@@ -14,8 +13,8 @@ use vector2D::Vector2D;
 extern "C" {
     #[wasm_bindgen(js_namespace = Math)]
     fn random() -> f64;
-    // #[wasm_bindgen(js_namespace = console)]
-    // fn log(message: String);
+// #[wasm_bindgen(js_namespace = console)]
+// fn log(message: String);
 }
 
 #[wasm_bindgen]
@@ -29,15 +28,33 @@ pub struct Ball {
     mass: f64,
     gravity: f64,
     elasticity: f64,
-    friction: f64
+    friction: f64,
 }
 
 #[wasm_bindgen]
 impl Ball {
     #[wasm_bindgen(constructor, catch)]
-    pub fn new(x: f64, y: f64, velocity_x: f64, velocity_y: f64, radius: f64, mass: f64, gravity: f64, elasticity: f64, friction: f64) -> Ball {
+    pub fn new(
+        x: f64,
+        y: f64,
+        velocity_x: f64,
+        velocity_y: f64,
+        radius: f64,
+        mass: f64,
+        gravity: f64,
+        elasticity: f64,
+        friction: f64,
+    ) -> Ball {
         Ball {
-            x, y, velocity_x, velocity_y, radius, mass, gravity, elasticity, friction
+            x,
+            y,
+            velocity_x,
+            velocity_y,
+            radius,
+            mass,
+            gravity,
+            elasticity,
+            friction,
         }
     }
     pub fn step(&mut self) {
@@ -93,15 +110,18 @@ impl Ball {
         let delta = self.get_vector_2d(&*ball);
         let d = delta.get_length();
         // minimum translation distance to push balls apart after intersecting
-        let mtd = delta.scale(((self.radius + ball.radius)-d)/d);
+        let mtd = delta.scale(((self.radius + ball.radius) - d) / d);
 
         // resolve intersection --
         // inverse mass quantities
-        let im1 = 1.0/self.mass;
-        let im2 = 1.0/ball.mass;
+        let im1 = 1.0 / self.mass;
+        let im2 = 1.0 / ball.mass;
 
         // impact speed
-        let vector_velocity = Vector2D::new(self.velocity_x - ball.velocity_x, self.velocity_y - ball.velocity_y);
+        let vector_velocity = Vector2D::new(
+            self.velocity_x - ball.velocity_x,
+            self.velocity_y - ball.velocity_y,
+        );
         let normalized_mtd = mtd.normalize();
         let vn = vector_velocity.dot(&normalized_mtd);
 
@@ -124,13 +144,13 @@ impl Ball {
         ball.velocity_y = (ball.velocity_y - ims2.y) * self.elasticity;
     }
     #[wasm_bindgen(js_name=setRandomPositionAndSpeedInBounds)]
-    pub fn set_random_position_and_speed_in_bounds(&mut self, stage_width: f64,stage_height: f64) {
+    pub fn set_random_position_and_speed_in_bounds(&mut self, stage_width: f64, stage_height: f64) {
         self.x = self.random() * stage_width;
         self.y = self.random() * stage_height;
         self.velocity_x = self.random() * 10.0;
         self.velocity_y = self.random() * 10.0;
     }
-    fn get_vector_2d (&self, ball: &Ball) -> Vector2D {
+    fn get_vector_2d(&self, ball: &Ball) -> Vector2D {
         Vector2D::new(self.x - ball.x, self.y - ball.y)
     }
     pub fn random(&self) -> f64 {
@@ -150,7 +170,7 @@ impl Default for Ball {
             mass: 1.0,
             gravity: 1.0,
             elasticity: 0.98,
-            friction: 0.8
+            friction: 0.8,
         }
     }
 }

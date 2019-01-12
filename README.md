@@ -63,6 +63,20 @@ This will create a `pkg` folder containing:
 - `ball_wasm.d.ts`: TypeScript definitions of public functions of your rust crate that was turned to WebAssembly
 - `ball_wasm_bg.wasm`: Rust code turned into WebAssembly (will be required by `ball_wasm.js`)
 
+## Contributing
+
+### Style guide
+
+The JavaScript part is automatically formatted with [prettier](https://prettier.io/) if you set it up in your code editor. Otherwise, the JavaScript part of the code will be formatted at pre-commit hook.
+
+The Rust part is not automatically formatted at pre-commit hook (didn't want to force the user to install rustfmt-preview), please make sure you use a RLS (Rust Language Server) [plugin](https://github.com/rust-lang/rls-vscode) for your editor that will format your code.
+
+If you use vscode, you will have to open the `crate` folder as project ([the plugin doesn't support subfolders yet](https://github.com/rust-lang/rls-vscode/issues/419)).
+
+```
+code ./crate
+```
+
 ## Resources
 
 - [First attempt](https://github.com/topheman/webassembly-first-try/tree/master/03-rust-webpack-template) (simplier version)
