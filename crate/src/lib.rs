@@ -1,11 +1,11 @@
 #[macro_use]
 extern crate cfg_if;
-extern crate web_sys;
 extern crate wasm_bindgen;
+extern crate web_sys;
 
 mod ball;
-mod vector2D;
 mod render;
+mod vector2D;
 
 // use wasm_bindgen::prelude::*;
 
