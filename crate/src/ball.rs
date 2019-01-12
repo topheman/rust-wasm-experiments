@@ -103,8 +103,7 @@ impl Ball {
     }
     #[wasm_bindgen(js_name=resolveBallCollision)]
     pub fn resolve_ball_collision(&mut self, ball: &mut Ball) {
-        let RESTITUTION = 0.85;
-        // let RESTITUTION = 0.5;
+        const RESTITUTION: f64 = 0.85;
 
         //get the mtd
         let delta = self.get_vector_2d(&*ball);

@@ -26,20 +26,6 @@ impl Vector2D {
     pub fn dot(&self, vector: &Vector2D) -> f64 {
         self.x * vector.x + self.y * vector.y
     }
-    #[warn(dead_code)]
-    fn add(&self, vector: Vector2D) -> Vector2D {
-        Vector2D {
-            x: self.x + vector.x,
-            y: self.y + vector.y,
-        }
-    }
-    #[warn(dead_code)]
-    fn substract(&self, vector: Vector2D) -> Vector2D {
-        Vector2D {
-            x: self.x - vector.x,
-            y: self.y - vector.y,
-        }
-    }
     pub fn normalize(&self) -> Vector2D {
         Vector2D {
             x: self.x / self.get_length(),

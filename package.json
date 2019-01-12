@@ -10,8 +10,11 @@
     "serve": "serve ./dist",
     "deploy": "gh-pages -d dist",
     "pretty": "npx prettier --write '**/*.{js,jsx,json,css,scss}'",
+    "test": "npm run test:js && npm run test:rust",
+    "test:js": "echo \"No JavaScript tests\" && exit 0",
+    "test:rust": "cd ./crate && cargo test",
     "lint:precommit": "echo \"No precommit linting yet\" && exit 0",
-    "test:precommit": "echo \"No precommit test yet\" && exit 0"
+    "test:precommit": "npm test"
   },
   "bin": {
     "create-rust-webpack": ".bin/create-rust-webpack.js"

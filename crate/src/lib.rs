@@ -5,6 +5,7 @@ extern crate web_sys;
 
 mod ball;
 mod render;
+#[allow(non_snake_case)]
 mod vector2D;
 
 // use wasm_bindgen::prelude::*;
@@ -16,6 +17,7 @@ cfg_if! {
         extern crate console_error_panic_hook;
         use console_error_panic_hook::set_once as set_panic_hook;
     } else {
+        #[allow(dead_code)]
         #[inline]
         fn set_panic_hook() {}
     }

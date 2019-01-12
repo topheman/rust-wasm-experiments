@@ -8,6 +8,7 @@ use wasm_bindgen::prelude::*;
  * A JsValue doesn't actually live in Rust right now but actually in a table owned by the wasm-bindgen generated JS glue code. Eventually the ownership will transfer into wasm directly and this will likely become more efficient, but for now it may be slightly slow.
  */
 
+#[allow(dead_code)]
 #[wasm_bindgen(js_name=drawWasmBallToCtx)]
 pub fn draw_wasm_ball_to_ctx(
     ball: &Ball,
@@ -16,11 +17,13 @@ pub fn draw_wasm_ball_to_ctx(
 ) {
     ctx.set_fill_style(color);
     ctx.begin_path();
-    ctx.arc(ball.x, ball.y, ball.radius, 0.0, std::f64::consts::PI * 2.0);
+    ctx.arc(ball.x, ball.y, ball.radius, 0.0, std::f64::consts::PI * 2.0)
+        .unwrap();
     ctx.close_path();
     ctx.fill();
 }
 
+#[allow(dead_code)]
 #[wasm_bindgen(js_name=drawWasmBallToHtml)]
 pub fn draw_wasm_ball_to_html(ball: &Ball, color: &JsValue) -> String {
     format!("<div class='ball' style='position:absolute;top:{}px;left:{}px;background:{};width:{}px;height:{}px;border-radius:{}px'></div>",
