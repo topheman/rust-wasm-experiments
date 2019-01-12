@@ -12,6 +12,17 @@ Discover how to use Rust to generate WebAssembly, called by JavaScript.
 
 Generated with `npm init rust-webpack` from [rust-webpack-template](https://github.com/rustwasm/rust-webpack-template). [Original README available here](README.rwt.md).
 
+## Prerequisites
+
+Rust / Node / npm
+
+Currently, only the nightly toolchain of Rust is supporting WebAssembly:
+
+```shell
+rustup default nightly
+rustup target add wasm32-unknown-unknown
+```
+
 ## Install
 
 Make sure you have `cargo install wasm-pack`, then:
@@ -62,6 +73,17 @@ This will create a `pkg` folder containing:
 - `ball_wasm.js`: File that will be required on the JavaScript side (you'll need a module bundler like Webpack to import it)
 - `ball_wasm.d.ts`: TypeScript definitions of public functions of your rust crate that was turned to WebAssembly
 - `ball_wasm_bg.wasm`: Rust code turned into WebAssembly (will be required by `ball_wasm.js`)
+
+### Rust Nightly
+
+Running `rustup default nightly` will let you use rust nighly by default:
+
+- That way, for each command, you won't have to specify the toolchain like:
+  - `cargo +nightly [cmd]`
+- To get back to stable channel (you may have other project relying on stable channel), run:
+  - `rustup default stable`
+- To check which default toolchain you're on, run the following:
+  - `rustup toolchain list`
 
 ## Contributing
 
