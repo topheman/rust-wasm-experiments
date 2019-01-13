@@ -4,6 +4,7 @@ extern crate wasm_bindgen;
 extern crate web_sys;
 
 mod ball;
+mod ball_collection;
 mod render;
 #[allow(non_snake_case)]
 mod vector2D;

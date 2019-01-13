@@ -1,7 +1,7 @@
 function makeCanvasRenderNode() {
   const canvas = document.createElement("canvas");
   canvas.className =
-    "wasm-compute-wasm-render-canvas wasm-compute-js-render-canvas js-compute-js-render-canvas";
+    "wasmCollection-compute-wasmCollection-render-canvas wasm-compute-wasm-render-canvas wasm-compute-js-render-canvas js-compute-js-render-canvas";
   canvas.style.position = "absolute";
   canvas.style.top = "0px";
   canvas.style.left = "0px";
@@ -12,7 +12,7 @@ function makeCanvasRenderNode() {
 function makeHtmlRenderNode() {
   const div = document.createElement("div");
   div.className =
-    "wasm-compute-wasm-render-html wasm-compute-js-render-html js-compute-js-render-html";
+    "wasmCollection-compute-wasmCollection-render-html wasm-compute-wasm-render-html wasm-compute-js-render-html js-compute-js-render-html";
   div.style.position = "absolute";
   div.style.top = "0px";
   div.style.left = "0px";
@@ -82,6 +82,15 @@ export function prepareUI(stage) {
   });
   const renderModeToggles = makeRenderModeToggle(
     [
+      {
+        value: "wasmCollection-compute-wasmCollection-render-canvas",
+        label:
+          "compute by WASM - render by WASM into canvas (iteration in WASM)"
+      },
+      {
+        value: "wasmCollection-compute-wasmCollection-render-html",
+        label: "compute by WASM - render by WASM into html (iteration in WASM)"
+      },
       {
         value: "wasm-compute-wasm-render-canvas",
         label:
