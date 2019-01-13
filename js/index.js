@@ -2,6 +2,7 @@ import { makeStage } from "./utils";
 import { prepareUI } from "./ui";
 import BallJS from "./libs/Ball";
 
+const BALL_RADIUS = 15;
 const BALL_MASS = 1.3;
 const BALL_GRAVITY = 1;
 const BALL_ELASTICITY = 0.98;
@@ -18,7 +19,7 @@ import("../crate/pkg")
       y = 0,
       velocityX = 0,
       velocityY = 0,
-      radius = 15,
+      radius = BALL_RADIUS,
       mass = BALL_MASS,
       gravity = BALL_GRAVITY,
       elasticity = BALL_ELASTICITY,
@@ -60,6 +61,7 @@ import("../crate/pkg")
      */
     function update(d) {
       delta = d;
+      balls["wasmCollection"].update(stage.width, stage.height);
       updateBalls(balls["wasm"]);
       updateBalls(balls["js"]);
     }
@@ -85,6 +87,19 @@ import("../crate/pkg")
     }
 
     const drawFunc = {
+      "wasmCollection-compute-wasmCollection-render-canvas": function() {
+        balls["wasmCollection"].drawToCtx(
+          canvasCtx,
+          "black",
+          stage.width,
+          stage.height
+        );
+      },
+      "wasmCollection-compute-wasmCollection-render-html": function() {
+        htmlRenderNode.innerHTML = balls["wasmCollection"].drawToHtml(
+          "darkgrey"
+        );
+      },
       "wasm-compute-wasm-render-canvas": function() {
         canvasCtx.clearRect(0, 0, stage.width, stage.height);
         balls["wasm"].forEach(ball =>
@@ -150,11 +165,28 @@ import("../crate/pkg")
     let lastFrameTimeMs = 0;
 
     const balls = {
+      wasmCollection: (() => {
+        const balls = new module.BallCollection();
+        balls.fill(
+          MAX_BALLS,
+          BALL_RADIUS,
+          BALL_MASS,
+          BALL_GRAVITY,
+          BALL_ELASTICITY,
+          BALL_FRICTION
+        );
+        return balls;
+      })(),
       wasm: Array.from(Array(MAX_BALLS), _ => makeBall()),
       js: Array.from(Array(MAX_BALLS), _ => makeBall({ wasm: false }))
     };
 
     const shuffle = () => {
+      balls["wasmCollection"].setRandomPositionAndSpeedInBounds(
+        stage.width,
+        stage.height
+      );
+      console.log(balls["wasmCollection"].format());
       balls["wasm"].forEach(ball => {
         ball.setRandomPositionAndSpeedInBounds(stage.width, stage.height);
       });
