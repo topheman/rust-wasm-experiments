@@ -59,7 +59,17 @@ impl BallCollection {
         // check balls vs border collision
         self.manage_stage_border_collision(stage_width, stage_height);
         // check ball vs ball collision
-        // TODO ⚠️
+        for i in 0..self.balls.len() {
+            // divide self.balls (mutable slice) into two mutable slices at an index (i + 1) - https://doc.rust-lang.org/std/vec/struct.Vec.html#method.split_at_mut
+            let (balls_mut_slice_left, ball_mut_slice_right) = self.balls.split_at_mut(i + 1);
+            for j in 0..ball_mut_slice_right.len() {
+                if balls_mut_slice_left[i].check_ball_collision(&mut ball_mut_slice_right[j])
+                    == true
+                {
+                    balls_mut_slice_left[i].resolve_ball_collision(&mut ball_mut_slice_right[j]);
+                }
+            }
+        }
     }
     #[wasm_bindgen(js_name=drawToCtx)]
     pub fn draw_to_ctx(
