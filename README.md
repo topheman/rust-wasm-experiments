@@ -2,7 +2,15 @@
 
 [![Demo](https://img.shields.io/badge/demo-online-blue.svg)](https://topheman.github.io/rust-wasm-experiments/)
 
-Bouncing balls algorithm (handling physics interactions between balls) implemented in both plain JavaScript and Rust/WebAssembly.
+Bouncing balls algorithm (handling physics interactions between balls) implemented in both plain **JavaScript** and **Rust/WebAssembly**:
+
+- [x] computation and rendering (canvas/html) made in full JavaScript
+- [x] computation in Rust/WebAssembly - rendering in JavaScript
+- [x] computation and rendering in Rust/WebAssembly (loops made in JavaScript)
+- [x] computation, rendering and iterations made in Rust/WebAssembly
+- [ ] Unit tests
+- [ ] CI
+- [ ] Setup some performance infos to pull up / Benchmark ?
 
 Discover how to use Rust to generate WebAssembly, called by JavaScript.
 
