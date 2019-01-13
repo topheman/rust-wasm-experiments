@@ -61,9 +61,17 @@ import("../crate/pkg")
      */
     function update(d) {
       delta = d;
-      balls["wasmCollection"].update(stage.width, stage.height);
-      updateBalls(balls["wasm"]);
-      updateBalls(balls["js"]);
+      switch (stage.mode.split("-").shift()) {
+        case "wasmCollection":
+          balls["wasmCollection"].update(stage.width, stage.height);
+          break;
+        case "wasm":
+          updateBalls(balls["wasm"]);
+          break;
+        case "js":
+          updateBalls(balls["js"]);
+          break;
+      }
     }
 
     /**
