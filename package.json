@@ -38,8 +38,8 @@
     "lint-staged": "^8.1.7",
     "prettier": "1.15.3",
     "serve": "^10.1.1",
-    "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.4.1"
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.5.1"
   }
 }
