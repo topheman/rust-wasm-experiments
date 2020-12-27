@@ -2,6 +2,8 @@
 
 [![Demo](https://img.shields.io/badge/demo-online-blue.svg)](https://topheman.github.io/rust-wasm-experiments/)
 
+📺🇫🇷 [Utiliser WebAssembly, dès aujourd'hui - ParisJS #86](https://www.youtube.com/watch?v=F3wOfWIFzVc&list=PLWhFHBFsRtquZ6hVXVjXmJ-l51ZXuSBtb)
+
 Bouncing balls algorithm (handling physics interactions between balls) implemented in both plain **JavaScript** and **Rust/WebAssembly**:
 
 - [x] computation and rendering (canvas/html) made in full JavaScript
@@ -24,12 +26,16 @@ Generated with `npm init rust-webpack` from [rust-webpack-template](https://gith
 
 Rust / Node / npm
 
-Currently, only the nightly toolchain of Rust is supporting WebAssembly:
+<details>
+<summary>Note for legacy version of rust</summary>
+At the time this project was made, WebAssembly was only supported on the nightly toolchain of Rust and you had to specify the target for wasm. You don't have to do the following anymore with recent versions of Rust:
 
 ```shell
 rustup default nightly
 rustup target add wasm32-unknown-unknown
 ```
+
+</details>
 
 ## Install
 
